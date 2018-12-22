@@ -1087,8 +1087,9 @@ void lcd_quick_feedback(const bool clear_buttons) {
     START_MENU();
     MENU_BACK(MSG_WATCH);
 
-    
-
+    #if ENABLED(CUSTOM_USER_MENUS)
+      MENU_ITEM(submenu, MSG_USER_MENU, _lcd_user_menu);
+    #endif
 
     //
     // Debug Menu when certain options are enabled
@@ -1097,47 +1098,23 @@ void lcd_quick_feedback(const bool clear_buttons) {
       MENU_ITEM(submenu, MSG_DEBUG_MENU, lcd_debug_menu);
     #endif
 
-    
+    //
+    // Set Case light on/off/brightness
+    //
+    #if ENABLED(MENU_ITEM_CASE_LIGHT)
+      if (USEABLE_HARDWARE_PWM(CASE_LIGHT_PIN)) {
+        MENU_ITEM(submenu, MSG_CASE_LIGHT, case_light_menu);
+      }
+      else
+        MENU_ITEM_EDIT_CALLBACK(bool, MSG_CASE_LIGHT, (bool*)&case_light_on, update_case_light);
+    #endif
 
     if (planner.movesplanned() || IS_SD_PRINTING)
-      MENU_ITEM(submenu, MSG_TUNE, lcd_tune_menu); //Tune Menu
+      MENU_ITEM(submenu, MSG_TUNE, lcd_tune_menu);
     else
-      MENU_ITEM(submenu, MSG_PREPARE, lcd_prepare_menu); // Prepare Menu 
-      
+      MENU_ITEM(submenu, MSG_PREPARE, lcd_prepare_menu);
 
-    MENU_ITEM(submenu, MSG_CONTROL, lcd_control_menu); // Control Menu
-/*
-    #if HAS_TEMP_HOTEND // Cooldown 
-
-      //
-      // Cooldown
-      //
-      bool has_heat = false;
-      if (has_heat) MENU_ITEM(function, MSG_COOLDOWN, lcd_cooldown);
-
-
-
-*/
-    // Change filament
-    //
-    #if ENABLED(ADVANCED_PAUSE_FEATURE) //"Change Filament"
-      if (!IS_SD_FILE_OPEN) {
-        #if E_STEPPERS == 1 && !ENABLED(FILAMENT_LOAD_UNLOAD_GCODES)
-          if (thermalManager.targetHotEnoughToExtrude(active_extruder))
-            MENU_ITEM(gcode, MSG_FILAMENTCHANGE, PSTR("M600 B0"));
-          else
-            MENU_ITEM(submenu, MSG_FILAMENTCHANGE, lcd_temp_menu_e0_filament_change);
-        #else
-          MENU_ITEM(submenu, MSG_FILAMENTCHANGE, lcd_change_filament_menu);
-        #endif
-      }
-    #endif // ADVANCED_PAUSE_FEATURE
-
-
-
-
-
-
+    MENU_ITEM(submenu, MSG_CONTROL, lcd_control_menu);
 
     #if ENABLED(SDSUPPORT)
       if (card.cardOK) {
@@ -1163,29 +1140,9 @@ void lcd_quick_feedback(const bool clear_buttons) {
       }
     #endif // SDSUPPORT
 
-
-
-
-
-    #if ENABLED(CUSTOM_USER_MENUS)
-      MENU_ITEM(submenu, MSG_USER_MENU, _lcd_user_menu);
-    #endif
-
     #if ENABLED(LCD_INFO_MENU)
       MENU_ITEM(submenu, MSG_INFO_MENU, lcd_info_menu);
     #endif
-
-    /*
-    // Set Case light on/off/brightness
-    //
-    #if ENABLED(MENU_ITEM_CASE_LIGHT)
-      if (USEABLE_HARDWARE_PWM(CASE_LIGHT_PIN)) {
-        MENU_ITEM(submenu, MSG_CASE_LIGHT, case_light_menu);
-      }
-      else
-        MENU_ITEM_EDIT_CALLBACK(bool, MSG_CASE_LIGHT, (bool*)&case_light_on, update_case_light);
-    #endif
-    */
 
     #if ENABLED(LED_CONTROL_MENU)
       MENU_ITEM(submenu, MSG_LED_CONTROL, lcd_led_menu);
@@ -1636,11 +1593,9 @@ void lcd_quick_feedback(const bool clear_buttons) {
   #if HAS_TEMP_HOTEND
     void lcd_preheat_m1_e0_only() { _lcd_preheat(0, lcd_preheat_hotend_temp[0], -1, lcd_preheat_fan_speed[0]); }
     void lcd_preheat_m2_e0_only() { _lcd_preheat(0, lcd_preheat_hotend_temp[1], -1, lcd_preheat_fan_speed[1]); }
-    void lcd_preheat_m3_e0_only() { _lcd_preheat(0, lcd_preheat_hotend_temp[2], -1, lcd_preheat_fan_speed[2]); }
     #if HAS_HEATED_BED
       void lcd_preheat_m1_e0() { _lcd_preheat(0, lcd_preheat_hotend_temp[0], lcd_preheat_bed_temp[0], lcd_preheat_fan_speed[0]); }
       void lcd_preheat_m2_e0() { _lcd_preheat(0, lcd_preheat_hotend_temp[1], lcd_preheat_bed_temp[1], lcd_preheat_fan_speed[1]); }
-      void lcd_preheat_m3_e0() { _lcd_preheat(0, lcd_preheat_hotend_temp[2], lcd_preheat_bed_temp[2], lcd_preheat_fan_speed[2]); }
     #endif
   #endif
 
@@ -1715,32 +1670,11 @@ void lcd_quick_feedback(const bool clear_buttons) {
       #endif
     }
 
-    void lcd_preheat_m3_all() {
-      #if HOTENDS > 1
-        thermalManager.setTargetHotend(lcd_preheat_hotend_temp[2], 1);
-        #if HOTENDS > 2
-          thermalManager.setTargetHotend(lcd_preheat_hotend_temp[2], 2);
-          #if HOTENDS > 3
-            thermalManager.setTargetHotend(lcd_preheat_hotend_temp[2], 3);
-            #if HOTENDS > 4
-              thermalManager.setTargetHotend(lcd_preheat_hotend_temp[2], 4);
-            #endif // HOTENDS > 4
-          #endif // HOTENDS > 3
-        #endif // HOTENDS > 2
-      #endif // HOTENDS > 1
-      #if HAS_HEATED_BED
-        lcd_preheat_m3_e0();
-      #else
-        lcd_preheat_m3_e0_only();
-      #endif
-    }
-
   #endif // HOTENDS > 1
 
   #if HAS_HEATED_BED
     void lcd_preheat_m1_bedonly() { _lcd_preheat(0, 0, lcd_preheat_bed_temp[0], lcd_preheat_fan_speed[0]); }
     void lcd_preheat_m2_bedonly() { _lcd_preheat(0, 0, lcd_preheat_bed_temp[1], lcd_preheat_fan_speed[1]); }
-    void lcd_preheat_m3_bedonly() { _lcd_preheat(0, 0, lcd_preheat_bed_temp[2], lcd_preheat_fan_speed[2]); }
   #endif
 
   #if HAS_TEMP_HOTEND || HAS_HEATED_BED
@@ -1845,58 +1779,6 @@ void lcd_quick_feedback(const bool clear_buttons) {
       #endif // HOTENDS > 1
       #if HAS_HEATED_BED
         MENU_ITEM(function, MSG_PREHEAT_2_BEDONLY, lcd_preheat_m2_bedonly);
-      #endif
-      END_MENU();
-    }
-
-    void lcd_preheat_m3_menu() {
-      START_MENU();
-      MENU_BACK(MSG_PREPARE);
-      #if HOTENDS == 1
-        #if HAS_HEATED_BED
-          MENU_ITEM(function, MSG_PREHEAT_3, lcd_preheat_m3_e0);
-          MENU_ITEM(function, MSG_PREHEAT_3_END, lcd_preheat_m3_e0_only);
-        #else
-          MENU_ITEM(function, MSG_PREHEAT_3, lcd_preheat_m3_e0_only);
-        #endif
-      #elif HOTENDS > 1
-        #if HAS_HEATED_BED
-          MENU_ITEM(function, MSG_PREHEAT_3_N MSG_H1, lcd_preheat_m3_e0);
-          MENU_ITEM(function, MSG_PREHEAT_3_END " " MSG_E1, lcd_preheat_m3_e0_only);
-          MENU_ITEM(function, MSG_PREHEAT_3_N MSG_H2, lcd_preheat_m3_e1);
-          MENU_ITEM(function, MSG_PREHEAT_3_END " " MSG_E2, lcd_preheat_m3_e1_only);
-        #else
-          MENU_ITEM(function, MSG_PREHEAT_3_N MSG_H1, lcd_preheat_m3_e0_only);
-          MENU_ITEM(function, MSG_PREHEAT_3_N MSG_H2, lcd_preheat_m3_e1_only);
-        #endif
-        #if HOTENDS > 2
-          #if HAS_HEATED_BED
-            MENU_ITEM(function, MSG_PREHEAT_3_N MSG_H3, lcd_preheat_m3_e2);
-            MENU_ITEM(function, MSG_PREHEAT_3_END " " MSG_E3, lcd_preheat_m3_e2_only);
-          #else
-            MENU_ITEM(function, MSG_PREHEAT_3_N MSG_H3, lcd_preheat_m3_e2_only);
-          #endif
-          #if HOTENDS > 3
-            #if HAS_HEATED_BED
-              MENU_ITEM(function, MSG_PREHEAT_3_N MSG_H4, lcd_preheat_m3_e3);
-              MENU_ITEM(function, MSG_PREHEAT_3_END " " MSG_E4, lcd_preheat_m3_e3_only);
-            #else
-              MENU_ITEM(function, MSG_PREHEAT_3_N MSG_H4, lcd_preheat_m3_e3_only);
-            #endif
-            #if HOTENDS > 4
-              #if HAS_HEATED_BED
-                MENU_ITEM(function, MSG_PREHEAT_3_N MSG_H5, lcd_preheat_m3_e4);
-                MENU_ITEM(function, MSG_PREHEAT_3_END " " MSG_E5, lcd_preheat_m3_e4_only);
-              #else
-                MENU_ITEM(function, MSG_PREHEAT_3_N MSG_H5, lcd_preheat_m3_e4_only);
-              #endif
-            #endif // HOTENDS > 4
-          #endif // HOTENDS > 3
-        #endif // HOTENDS > 2
-        MENU_ITEM(function, MSG_PREHEAT_3_ALL, lcd_preheat_m3_all);
-      #endif // HOTENDS > 1
-      #if HAS_HEATED_BED
-        MENU_ITEM(function, MSG_PREHEAT_3_BEDONLY, lcd_preheat_m3_bedonly);
       #endif
       END_MENU();
     }
@@ -2846,9 +2728,9 @@ void lcd_quick_feedback(const bool clear_buttons) {
     //
     MENU_ITEM(gcode, MSG_DISABLE_STEPPERS, PSTR("M84"));
 
-    /*
+    //
     // Change filament
-    // MOVED TO MAIN MENU
+    //
     #if ENABLED(ADVANCED_PAUSE_FEATURE) //"Change Filament"
       if (!IS_SD_FILE_OPEN) {
         #if E_STEPPERS == 1 && !ENABLED(FILAMENT_LOAD_UNLOAD_GCODES)
@@ -2861,7 +2743,7 @@ void lcd_quick_feedback(const bool clear_buttons) {
         #endif
       }
     #endif // ADVANCED_PAUSE_FEATURE
-    */
+
     #if HAS_TEMP_HOTEND
 
       //
@@ -2880,11 +2762,9 @@ void lcd_quick_feedback(const bool clear_buttons) {
       #if TEMP_SENSOR_1 != 0 || TEMP_SENSOR_2 != 0 || TEMP_SENSOR_3 != 0 || TEMP_SENSOR_4 != 0 || HAS_HEATED_BED
         MENU_ITEM(submenu, MSG_PREHEAT_1, lcd_preheat_m1_menu);
         MENU_ITEM(submenu, MSG_PREHEAT_2, lcd_preheat_m2_menu);
-        MENU_ITEM(submenu, MSG_PREHEAT_3, lcd_preheat_m3_menu);
       #else
         MENU_ITEM(function, MSG_PREHEAT_1, lcd_preheat_m1_e0_only);
         MENU_ITEM(function, MSG_PREHEAT_2, lcd_preheat_m2_e0_only);
-         MENU_ITEM(function, MSG_PREHEAT_3, lcd_preheat_m3_e0_only);
       #endif
 
     #endif // HAS_TEMP_HOTEND
@@ -4430,7 +4310,7 @@ void lcd_quick_feedback(const bool clear_buttons) {
     }
     void _lcd_change_filament_temp_1_menu() { _change_filament_temp(1); }
     void _lcd_change_filament_temp_2_menu() { _change_filament_temp(2); }
-    void _lcd_change_filament_temp_3_menu() { _change_filament_temp(3); }
+
     static const char* change_filament_header(const AdvancedPauseMode mode) {
       switch (mode) {
         case ADVANCED_PAUSE_MODE_LOAD_FILAMENT:
@@ -4450,7 +4330,6 @@ void lcd_quick_feedback(const bool clear_buttons) {
       MENU_BACK(MSG_FILAMENTCHANGE);
       MENU_ITEM(submenu, MSG_PREHEAT_1, _lcd_change_filament_temp_1_menu);
       MENU_ITEM(submenu, MSG_PREHEAT_2, _lcd_change_filament_temp_2_menu);
-      MENU_ITEM(submenu, MSG_PREHEAT_3, _lcd_change_filament_temp_3_menu);
       END_MENU();
     }
     void lcd_temp_menu_e0_filament_change()  { _lcd_temp_menu_filament_op(ADVANCED_PAUSE_MODE_PAUSE_PRINT, 0); }
@@ -4492,15 +4371,11 @@ void lcd_quick_feedback(const bool clear_buttons) {
 
         // Change filament
         #if E_STEPPERS == 1
-
-
           PGM_P msg0 = PSTR(MSG_FILAMENTCHANGE);
           if (thermalManager.targetTooColdToExtrude(active_extruder))
             MENU_ITEM_P(submenu, msg0, lcd_temp_menu_e0_filament_change);
           else
             MENU_ITEM_P(gcode, msg0, PSTR("M600 B0"));
-
-
         #else
           PGM_P msg0 = PSTR(MSG_FILAMENTCHANGE " " MSG_E1);
           PGM_P msg1 = PSTR(MSG_FILAMENTCHANGE " " MSG_E2);

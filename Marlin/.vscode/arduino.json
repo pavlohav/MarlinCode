@@ -1,0 +1,5 @@
+{
+    "programmer": "Arduino as ISP",
+    "board": "Sanguino:avr:sanguino",
+    "configuration": "cpu=atmega1284p"
+}

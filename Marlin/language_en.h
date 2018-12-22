@@ -112,6 +112,7 @@
 #ifndef MSG_SET_ORIGIN
   #define MSG_SET_ORIGIN                      _UxGT("Set origin")
 #endif
+//Start of Preheat 1
 #ifndef MSG_PREHEAT_1
   #define MSG_PREHEAT_1                       _UxGT("Preheat PLA")
 #endif
@@ -130,6 +131,7 @@
 #ifndef MSG_PREHEAT_1_SETTINGS
   #define MSG_PREHEAT_1_SETTINGS              MSG_PREHEAT_1 _UxGT(" conf")
 #endif
+//Start of Preheat 2
 #ifndef MSG_PREHEAT_2
   #define MSG_PREHEAT_2                       _UxGT("Preheat ABS")
 #endif
@@ -148,6 +150,26 @@
 #ifndef MSG_PREHEAT_2_SETTINGS
   #define MSG_PREHEAT_2_SETTINGS              MSG_PREHEAT_2 _UxGT(" conf")
 #endif
+//Start of Preheat 3
+#ifndef MSG_PREHEAT_3
+  #define MSG_PREHEAT_3                       _UxGT("Preheat PETG")
+#endif
+#ifndef MSG_PREHEAT_3_N
+  #define MSG_PREHEAT_3_N                     MSG_PREHEAT_3 _UxGT(" ")
+#endif
+#ifndef MSG_PREHEAT_3_ALL
+  #define MSG_PREHEAT_3_ALL                   MSG_PREHEAT_3 _UxGT(" All")
+#endif
+#ifndef MSG_PREHEAT_3_END
+  #define MSG_PREHEAT_3_END                   MSG_PREHEAT_3 _UxGT(" End")
+#endif
+#ifndef MSG_PREHEAT_3_BEDONLY
+  #define MSG_PREHEAT_3_BEDONLY               MSG_PREHEAT_3 _UxGT(" Bed")
+#endif
+#ifndef MSG_PREHEAT_3_SETTINGS
+  #define MSG_PREHEAT_3_SETTINGS              MSG_PREHEAT_3 _UxGT(" conf")
+#endif
+//end of preheat 3
 #ifndef MSG_COOLDOWN
   #define MSG_COOLDOWN                        _UxGT("Cooldown")
 #endif
