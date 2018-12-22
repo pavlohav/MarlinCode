@@ -344,10 +344,10 @@
 // This feature exists to protect your hotend from overheating accidentally, but *NOT* from thermistor short/failure!
 // You should use MINTEMP for thermistor short/failure protection.
 #define HEATER_0_MAXTEMP 285
-#define HEATER_1_MAXTEMP 275
-#define HEATER_2_MAXTEMP 275
-#define HEATER_3_MAXTEMP 275
-#define HEATER_4_MAXTEMP 275
+#define HEATER_1_MAXTEMP 285
+#define HEATER_2_MAXTEMP 285
+#define HEATER_3_MAXTEMP 285
+#define HEATER_4_MAXTEMP 285
 #define BED_MAXTEMP 100
 
 //===========================================================================
@@ -613,6 +613,7 @@
  * Default Max Feed Rate (mm/s)
  * Override with M203
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
+ * http://www.kylesconverter.com/speed-or-velocity/meters-per-second-to-meters-per-minute
  */
 #define DEFAULT_MAX_FEEDRATE          { 200, 200, 15, 50 }
 
@@ -880,6 +881,7 @@
 // The size of the print bed
 #define X_BED_SIZE 200
 #define Y_BED_SIZE 195
+#define Z_SIZE 160
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
 #define X_MIN_POS 0
@@ -887,7 +889,7 @@
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
 #define Y_MAX_POS Y_BED_SIZE
-#define Z_MAX_POS 180
+#define Z_MAX_POS Z_SIZE
 
 /**
  * Software Endstops
