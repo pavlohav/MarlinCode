@@ -32,7 +32,6 @@
 #include "planner.h"
 #include "stepper.h"
 #include "configuration_store.h"
-//#include "configuration_store.cpp"
 #include "utility.h"
 #include "parser.h"
 
@@ -148,7 +147,7 @@ uint16_t max_display_update_time = 0;
   constexpr int8_t menu_bottom = LCD_HEIGHT - (TALL_FONT_CORRECTION);
 
   // Initialized by settings.load()
-  int16_t lcd_preheat_hotend_temp[2], lcd_preheat_bed_temp[2], lcd_preheat_fan_speed[2];
+   int16_t lcd_preheat_hotend_temp[3], lcd_preheat_bed_temp[3], lcd_preheat_fan_speed[3];
 
   #if ENABLED(AUTO_BED_LEVELING_UBL) || ENABLED(G26_MESH_VALIDATION)
     bool lcd_external_control; // = false
@@ -183,6 +182,7 @@ uint16_t max_display_update_time = 0;
   #if DISABLED(SLIM_LCD_MENUS)
     void lcd_control_temperature_preheat_material1_settings_menu();
     void lcd_control_temperature_preheat_material2_settings_menu();
+    void lcd_control_temperature_preheat_material3_settings_menu();
   #endif
 
   #if DISABLED(NO_VOLUMETRICS) || ENABLED(ADVANCED_PAUSE_FEATURE)
@@ -1104,33 +1104,21 @@ void lcd_quick_feedback(const bool clear_buttons) {
       MENU_ITEM(submenu, MSG_TUNE, lcd_tune_menu); //Tune Menu
     else
       MENU_ITEM(submenu, MSG_PREPARE, lcd_prepare_menu); // Prepare Menu 
-      MENU_ITEM(submenu, MSG_CONTROL, lcd_control_menu); // Control Menu
-    
-     /*
-      * Tried adding Cooldown to Main Menu
- 
-    void lcd_cooldown() {
-      #if FAN_COUNT > 0
-      for (uint8_t i = 0; i < FAN_COUNT; i++) fanSpeeds[i] = 0;
-      #endif
-      thermalManager.disable_all_heaters();
-      lcd_return_to_status();
-       }
+      
 
-    #if HAS_TEMP_HOTEND
+    MENU_ITEM(submenu, MSG_CONTROL, lcd_control_menu); // Control Menu
+/*
+    #if HAS_TEMP_HOTEND // Cooldown 
 
       //
       // Cooldown
       //
       bool has_heat = false;
-      HOTEND_LOOP() if (thermalManager.target_temperature[HOTEND_INDEX]) { has_heat = true; break; }
-      #if HAS_HEATED_BED
-        if (thermalManager.target_temperature_bed) has_heat = true;
-      #endif
-      if (has_heat) MENU_ITEM(function, MSG_COOLDOWN, lcd_cooldown );
-      #endif
-      */
+      if (has_heat) MENU_ITEM(function, MSG_COOLDOWN, lcd_cooldown);
 
+
+
+*/
     // Change filament
     //
     #if ENABLED(ADVANCED_PAUSE_FEATURE) //"Change Filament"
@@ -1145,6 +1133,10 @@ void lcd_quick_feedback(const bool clear_buttons) {
         #endif
       }
     #endif // ADVANCED_PAUSE_FEATURE
+
+
+
+
 
 
 
@@ -1645,49 +1637,41 @@ void lcd_quick_feedback(const bool clear_buttons) {
   #if HAS_TEMP_HOTEND
     void lcd_preheat_m1_e0_only() { _lcd_preheat(0, lcd_preheat_hotend_temp[0], -1, lcd_preheat_fan_speed[0]); }
     void lcd_preheat_m2_e0_only() { _lcd_preheat(0, lcd_preheat_hotend_temp[1], -1, lcd_preheat_fan_speed[1]); }
-    void lcd_preheat_m3_e0_only() { _lcd_preheat(0, lcd_preheat_hotend_temp[3], -1, lcd_preheat_fan_speed[3]); }
+    void lcd_preheat_m3_e0_only() { _lcd_preheat(0, lcd_preheat_hotend_temp[2], -1, lcd_preheat_fan_speed[2]); }
     #if HAS_HEATED_BED
       void lcd_preheat_m1_e0() { _lcd_preheat(0, lcd_preheat_hotend_temp[0], lcd_preheat_bed_temp[0], lcd_preheat_fan_speed[0]); }
       void lcd_preheat_m2_e0() { _lcd_preheat(0, lcd_preheat_hotend_temp[1], lcd_preheat_bed_temp[1], lcd_preheat_fan_speed[1]); }
-      void lcd_preheat_m3_e0() { _lcd_preheat(0, lcd_preheat_hotend_temp[3], lcd_preheat_bed_temp[3], lcd_preheat_fan_speed[3]); }
+      void lcd_preheat_m3_e0() { _lcd_preheat(0, lcd_preheat_hotend_temp[2], lcd_preheat_bed_temp[2], lcd_preheat_fan_speed[2]); }
     #endif
   #endif
 
   #if HOTENDS > 1
     void lcd_preheat_m1_e1_only() { _lcd_preheat(1, lcd_preheat_hotend_temp[0], -1, lcd_preheat_fan_speed[0]); }
     void lcd_preheat_m2_e1_only() { _lcd_preheat(1, lcd_preheat_hotend_temp[1], -1, lcd_preheat_fan_speed[1]); }
-    void lcd_preheat_m3_e1_only() { _lcd_preheat(1, lcd_preheat_hotend_temp[3], -1, lcd_preheat_fan_speed[3]); }
     #if HAS_HEATED_BED
       void lcd_preheat_m1_e1() { _lcd_preheat(1, lcd_preheat_hotend_temp[0], lcd_preheat_bed_temp[0], lcd_preheat_fan_speed[0]); }
       void lcd_preheat_m2_e1() { _lcd_preheat(1, lcd_preheat_hotend_temp[1], lcd_preheat_bed_temp[1], lcd_preheat_fan_speed[1]); }
-      void lcd_preheat_m3_e1() { _lcd_preheat(1, lcd_preheat_hotend_temp[3], lcd_preheat_bed_temp[3], lcd_preheat_fan_speed[3]); }
     #endif
     #if HOTENDS > 2
       void lcd_preheat_m1_e2_only() { _lcd_preheat(2, lcd_preheat_hotend_temp[0], -1, lcd_preheat_fan_speed[0]); }
       void lcd_preheat_m2_e2_only() { _lcd_preheat(2, lcd_preheat_hotend_temp[1], -1, lcd_preheat_fan_speed[1]); }
-      void lcd_preheat_m3_e2_only() { _lcd_preheat(2, lcd_preheat_hotend_temp[3], -1, lcd_preheat_fan_speed[3]); }
       #if HAS_HEATED_BED
         void lcd_preheat_m1_e2() { _lcd_preheat(2, lcd_preheat_hotend_temp[0], lcd_preheat_bed_temp[0], lcd_preheat_fan_speed[0]); }
         void lcd_preheat_m2_e2() { _lcd_preheat(2, lcd_preheat_hotend_temp[1], lcd_preheat_bed_temp[1], lcd_preheat_fan_speed[1]); }
-        void lcd_preheat_m3_e2() { _lcd_preheat(2, lcd_preheat_hotend_temp[3], lcd_preheat_bed_temp[3], lcd_preheat_fan_speed[3]); }
       #endif
       #if HOTENDS > 3
         void lcd_preheat_m1_e3_only() { _lcd_preheat(3, lcd_preheat_hotend_temp[0], -1, lcd_preheat_fan_speed[0]); }
         void lcd_preheat_m2_e3_only() { _lcd_preheat(3, lcd_preheat_hotend_temp[1], -1, lcd_preheat_fan_speed[1]); }
-        void lcd_preheat_m3_e3_only() { _lcd_preheat(3, lcd_preheat_hotend_temp[3], -1, lcd_preheat_fan_speed[3]); }
         #if HAS_HEATED_BED
           void lcd_preheat_m1_e3() { _lcd_preheat(3, lcd_preheat_hotend_temp[0], lcd_preheat_bed_temp[0], lcd_preheat_fan_speed[0]); }
           void lcd_preheat_m2_e3() { _lcd_preheat(3, lcd_preheat_hotend_temp[1], lcd_preheat_bed_temp[1], lcd_preheat_fan_speed[1]); }
-          void lcd_preheat_m3_e3() { _lcd_preheat(3, lcd_preheat_hotend_temp[3], lcd_preheat_bed_temp[3], lcd_preheat_fan_speed[3]); }
         #endif
         #if HOTENDS > 4
           void lcd_preheat_m1_e4_only() { _lcd_preheat(4, lcd_preheat_hotend_temp[0], -1, lcd_preheat_fan_speed[0]); }
           void lcd_preheat_m2_e4_only() { _lcd_preheat(4, lcd_preheat_hotend_temp[1], -1, lcd_preheat_fan_speed[1]); }
-          void lcd_preheat_m3_e4_only() { _lcd_preheat(4, lcd_preheat_hotend_temp[3], -1, lcd_preheat_fan_speed[3]); }
           #if HAS_HEATED_BED
             void lcd_preheat_m1_e4() { _lcd_preheat(4, lcd_preheat_hotend_temp[0], lcd_preheat_bed_temp[0], lcd_preheat_fan_speed[0]); }
             void lcd_preheat_m2_e4() { _lcd_preheat(4, lcd_preheat_hotend_temp[1], lcd_preheat_bed_temp[1], lcd_preheat_fan_speed[1]); }
-            void lcd_preheat_m3_e4() { _lcd_preheat(4, lcd_preheat_hotend_temp[3], lcd_preheat_bed_temp[3], lcd_preheat_fan_speed[3]); }
           #endif
         #endif // HOTENDS > 4
       #endif // HOTENDS > 3
@@ -1734,13 +1718,13 @@ void lcd_quick_feedback(const bool clear_buttons) {
 
     void lcd_preheat_m3_all() {
       #if HOTENDS > 1
-        thermalManager.setTargetHotend(lcd_preheat_hotend_temp[3], 1);
+        thermalManager.setTargetHotend(lcd_preheat_hotend_temp[2], 1);
         #if HOTENDS > 2
-          thermalManager.setTargetHotend(lcd_preheat_hotend_temp[3], 2);
+          thermalManager.setTargetHotend(lcd_preheat_hotend_temp[2], 2);
           #if HOTENDS > 3
-            thermalManager.setTargetHotend(lcd_preheat_hotend_temp[3], 3);
+            thermalManager.setTargetHotend(lcd_preheat_hotend_temp[2], 3);
             #if HOTENDS > 4
-              thermalManager.setTargetHotend(lcd_preheat_hotend_temp[3], 4);
+              thermalManager.setTargetHotend(lcd_preheat_hotend_temp[2], 4);
             #endif // HOTENDS > 4
           #endif // HOTENDS > 3
         #endif // HOTENDS > 2
@@ -1757,7 +1741,7 @@ void lcd_quick_feedback(const bool clear_buttons) {
   #if HAS_HEATED_BED
     void lcd_preheat_m1_bedonly() { _lcd_preheat(0, 0, lcd_preheat_bed_temp[0], lcd_preheat_fan_speed[0]); }
     void lcd_preheat_m2_bedonly() { _lcd_preheat(0, 0, lcd_preheat_bed_temp[1], lcd_preheat_fan_speed[1]); }
-    void lcd_preheat_m3_bedonly() { _lcd_preheat(0, 0, lcd_preheat_bed_temp[3], lcd_preheat_fan_speed[3]); }
+    void lcd_preheat_m3_bedonly() { _lcd_preheat(0, 0, lcd_preheat_bed_temp[2], lcd_preheat_fan_speed[2]); }
   #endif
 
   #if HAS_TEMP_HOTEND || HAS_HEATED_BED
@@ -1866,7 +1850,7 @@ void lcd_quick_feedback(const bool clear_buttons) {
       END_MENU();
     }
 
-    //void lcd_preheat_m3_menu() {
+    void lcd_preheat_m3_menu() {
       START_MENU();
       MENU_BACK(MSG_PREPARE);
       #if HOTENDS == 1
@@ -2309,11 +2293,9 @@ void lcd_quick_feedback(const bool clear_buttons) {
       #if HAS_HEATED_BED
         MENU_ITEM(gcode, MSG_UBL_VALIDATE_PLA_MESH, PSTR("G28\nG26 C B" STRINGIFY(PREHEAT_1_TEMP_BED) " H" STRINGIFY(PREHEAT_1_TEMP_HOTEND) " P"));
         MENU_ITEM(gcode, MSG_UBL_VALIDATE_ABS_MESH, PSTR("G28\nG26 C B" STRINGIFY(PREHEAT_2_TEMP_BED) " H" STRINGIFY(PREHEAT_2_TEMP_HOTEND) " P"));
-        MENU_ITEM(gcode, MSG_UBL_VALIDATE_PETG_MESH, PSTR("G28\nG26 C B" STRINGIFY(PREHEAT_3_TEMP_BED) " H" STRINGIFY(PREHEAT_3_TEMP_HOTEND) " P"));
       #else
         MENU_ITEM(gcode, MSG_UBL_VALIDATE_PLA_MESH, PSTR("G28\nG26 C B0 H" STRINGIFY(PREHEAT_1_TEMP_HOTEND) " P"));
         MENU_ITEM(gcode, MSG_UBL_VALIDATE_ABS_MESH, PSTR("G28\nG26 C B0 H" STRINGIFY(PREHEAT_2_TEMP_HOTEND) " P"));
-        MENU_ITEM(gcode, MSG_UBL_VALIDATE_PETG_MESH, PSTR("G28\nG26 C B0 H" STRINGIFY(PREHEAT_3_TEMP_HOTEND) " P"));
       #endif
       MENU_ITEM(function, MSG_UBL_VALIDATE_CUSTOM_MESH, _lcd_ubl_validate_custom_mesh);
       MENU_ITEM(function, MSG_WATCH, lcd_return_to_status);
@@ -2899,11 +2881,11 @@ void lcd_quick_feedback(const bool clear_buttons) {
       #if TEMP_SENSOR_1 != 0 || TEMP_SENSOR_2 != 0 || TEMP_SENSOR_3 != 0 || TEMP_SENSOR_4 != 0 || HAS_HEATED_BED
         MENU_ITEM(submenu, MSG_PREHEAT_1, lcd_preheat_m1_menu);
         MENU_ITEM(submenu, MSG_PREHEAT_2, lcd_preheat_m2_menu);
-       // MENU_ITEM(submenu, MSG_PREHEAT_3, lcd_preheat_m3_menu);
+        MENU_ITEM(submenu, MSG_PREHEAT_3, lcd_preheat_m3_menu);
       #else
         MENU_ITEM(function, MSG_PREHEAT_1, lcd_preheat_m1_e0_only);
         MENU_ITEM(function, MSG_PREHEAT_2, lcd_preheat_m2_e0_only);
-        //MENU_ITEM(function, MSG_PREHEAT_3, lcd_preheat_m3_e0_only);
+        MENU_ITEM(function, MSG_PREHEAT_3, lcd_preheat_m3_e0_only);
       #endif
 
     #endif // HAS_TEMP_HOTEND
@@ -3725,6 +3707,11 @@ void lcd_quick_feedback(const bool clear_buttons) {
       // Preheat Material 2 conf
       //
       MENU_ITEM(submenu, MSG_PREHEAT_2_SETTINGS, lcd_control_temperature_preheat_material2_settings_menu);
+
+      //
+      // Preheat Material 3 conf
+      //
+      MENU_ITEM(submenu, MSG_PREHEAT_3_SETTINGS, lcd_control_temperature_preheat_material3_settings_menu);
     #endif
 
     END_MENU();
@@ -3777,6 +3764,14 @@ void lcd_quick_feedback(const bool clear_buttons) {
      *
      */
     void lcd_control_temperature_preheat_material2_settings_menu() { _lcd_control_temperature_preheat_settings_menu(1); }
+
+    /**
+     *
+     * "Temperature" > "Preheat Material 2 conf" submenu
+     *
+     */
+    void lcd_control_temperature_preheat_material3_settings_menu() { _lcd_control_temperature_preheat_settings_menu(2); }
+    
 
     void _reset_acceleration_rates() { planner.reset_acceleration_rates(); }
     #if ENABLED(DISTINCT_E_FACTORS)
