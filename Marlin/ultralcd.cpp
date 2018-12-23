@@ -1104,9 +1104,7 @@ void lcd_quick_feedback(const bool clear_buttons) {
       MENU_ITEM(submenu, MSG_TUNE, lcd_tune_menu); //Tune Menu
     else
       MENU_ITEM(submenu, MSG_PREPARE, lcd_prepare_menu); // Prepare Menu 
-      
-
-    MENU_ITEM(submenu, MSG_CONTROL, lcd_control_menu); // Control Menu
+      MENU_ITEM(submenu, MSG_CONTROL, lcd_control_menu); // Control Menu
     
      /*
       * Tried adding Cooldown to Main Menu
@@ -2901,11 +2899,11 @@ void lcd_quick_feedback(const bool clear_buttons) {
       #if TEMP_SENSOR_1 != 0 || TEMP_SENSOR_2 != 0 || TEMP_SENSOR_3 != 0 || TEMP_SENSOR_4 != 0 || HAS_HEATED_BED
         MENU_ITEM(submenu, MSG_PREHEAT_1, lcd_preheat_m1_menu);
         MENU_ITEM(submenu, MSG_PREHEAT_2, lcd_preheat_m2_menu);
-        MENU_ITEM(submenu, MSG_PREHEAT_3, lcd_preheat_m3_menu);
+       // MENU_ITEM(submenu, MSG_PREHEAT_3, lcd_preheat_m3_menu);
       #else
         MENU_ITEM(function, MSG_PREHEAT_1, lcd_preheat_m1_e0_only);
         MENU_ITEM(function, MSG_PREHEAT_2, lcd_preheat_m2_e0_only);
-        MENU_ITEM(function, MSG_PREHEAT_3, lcd_preheat_m3_e0_only);
+        //MENU_ITEM(function, MSG_PREHEAT_3, lcd_preheat_m3_e0_only);
       #endif
 
     #endif // HAS_TEMP_HOTEND
