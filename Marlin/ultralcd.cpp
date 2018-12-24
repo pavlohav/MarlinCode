@@ -824,6 +824,13 @@ void lcd_quick_feedback(const bool clear_buttons) {
     }
     else lcd_buzz(20, 440);
   }
+  void lcd_cooldown() {
+    #if FAN_COUNT > 0
+      for (uint8_t i = 0; i < FAN_COUNT; i++) fanSpeeds[i] = 0;
+    #endif
+    thermalManager.disable_all_heaters();
+    lcd_return_to_status();
+  }
 
   inline void line_to_current_z() {
     planner.buffer_line_kinematic(current_position, MMM_TO_MMS(manual_feedrate_mm_m[Z_AXIS]), active_extruder);
@@ -1107,7 +1114,7 @@ void lcd_quick_feedback(const bool clear_buttons) {
       
 
     MENU_ITEM(submenu, MSG_CONTROL, lcd_control_menu); // Control Menu
-/*
+    /*
     #if HAS_TEMP_HOTEND // Cooldown 
 
       //
@@ -1115,10 +1122,12 @@ void lcd_quick_feedback(const bool clear_buttons) {
       //
       bool has_heat = false;
       if (has_heat) MENU_ITEM(function, MSG_COOLDOWN, lcd_cooldown);
+      */
 
 
-
-*/
+    MENU_ITEM(function, MSG_COOLDOWN, lcd_cooldown);
+    MENU_ITEM(gcode, MSG_DISABLE_STEPPERS, PSTR("M84"));
+    
     // Change filament
     //
     #if ENABLED(ADVANCED_PAUSE_FEATURE) //"Change Filament"
@@ -1903,7 +1912,7 @@ void lcd_quick_feedback(const bool clear_buttons) {
     }
 
   #endif // HAS_TEMP_HOTEND || HAS_HEATED_BED
-
+    /*
   void lcd_cooldown() {
     #if FAN_COUNT > 0
       for (uint8_t i = 0; i < FAN_COUNT; i++) fanSpeeds[i] = 0;
@@ -1911,7 +1920,7 @@ void lcd_quick_feedback(const bool clear_buttons) {
     thermalManager.disable_all_heaters();
     lcd_return_to_status();
   }
-
+    */
   #if ENABLED(AUTO_BED_LEVELING_UBL) || ENABLED(PID_AUTOTUNE_MENU) || ENABLED(ADVANCED_PAUSE_FEATURE)
 
     /**
