@@ -1005,7 +1005,7 @@
                                                   // Filament Unload does a Retract, Delay, and Purge first:
   #define FILAMENT_UNLOAD_RETRACT_LENGTH      13  // (mm) Unload initial retract length.
   #define FILAMENT_UNLOAD_DELAY             5000  // (ms) Delay for the filament to cool after retract.
-  #define FILAMENT_UNLOAD_PURGE_LENGTH         8  // (mm) An unretract is done, then this length is purged.
+  #define FILAMENT_UNLOAD_PURGE_LENGTH         38  // (mm) An unretract is done, then this length is purged.
 
   #define PAUSE_PARK_NOZZLE_TIMEOUT           45  // (seconds) Time limit before the nozzle is turned off for safety.
   #define FILAMENT_CHANGE_ALERT_BEEPS         10  // Number of alert beeps to play when a response is needed.
@@ -1014,7 +1014,7 @@
   //#define PARK_HEAD_ON_PAUSE                    // Park the nozzle during pause and filament change.
   //#define HOME_BEFORE_FILAMENT_CHANGE           // Ensure homing has been completed prior to parking for filament change
 
-  //#define FILAMENT_LOAD_UNLOAD_GCODES           // Add M701/M702 Load/Unload G-codes, plus Load/Unload in the LCD Prepare menu.
+  #define FILAMENT_LOAD_UNLOAD_GCODES           // Add M701/M702 Load/Unload G-codes, plus Load/Unload in the LCD Prepare menu.
   //#define FILAMENT_UNLOAD_ALL_EXTRUDERS         // Allow M702 to unload all extruders above a minimum target temp (as set by M302)
 #endif
 
@@ -1513,7 +1513,7 @@
  
  
  #define CUSTOM_USER_MENUS
-#if ENABLED(CUSTOM_USER_MENUS)
+  #if ENABLED(CUSTOM_USER_MENUS)
   #define USER_SCRIPT_DONE "M117 User Script Done"
   #define USER_SCRIPT_AUDIBLE_FEEDBACK
   #define USER_SCRIPT_RETURN  // Return to status screen after a script
@@ -1521,8 +1521,8 @@
   #define USER_DESC_1 "Home & Raise Z"
   #define USER_GCODE_1 "G28 \nG1 Z20 F2000"
 
-  #define USER_DESC_2 "Level X Carriage"
-  #define USER_GCODE_2 "G28 \nG90 \nG1 Z170 F3000 \nG1 Z180 F100 \nG4 S1 \nG1 Z170 F100 \nG28 Z \nG1 Z20 F2000"
+  //#define USER_DESC_2 "Level X Carriage"
+  //#define USER_GCODE_2 "G28 \nG90 \nG1 Z170 F3000 \nG1 Z180 F100 \nG4 S1 \nG1 Z170 F100 \nG28 Z \nG1 Z20 F2000"
 
   //#define USER_DESC_3 "Load ABS Filament"
   //#define USER_GCODE_3 "M140 S" STRINGIFY(PREHEAT_2_TEMP_HOTEND) \nG28\nG1 Z20\nG1 E40 F100"

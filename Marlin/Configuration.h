@@ -607,7 +607,7 @@
  * Override with M92
  *                                        
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400.9, 94 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400.9, 164.91 }
 
 /**
  * Default Max Feed Rate (mm/s)
@@ -984,7 +984,7 @@
  * Normally G28 leaves leveling disabled on completion. Enable
  * this option to have G28 restore the prior leveling state.
  */
-//#define RESTORE_LEVELING_AFTER_G28
+#define RESTORE_LEVELING_AFTER_G28
 
 /**
  * Enable detailed logging of G28, G29, M48, etc.
@@ -1075,8 +1075,8 @@
   //=================================== Mesh ==================================
   //===========================================================================
 
-  #define MESH_INSET 10          // Set Mesh bounds as an inset region of the bed
-  #define GRID_MAX_POINTS_X 5    // Don't use more than 7 points per axis, implementation limited.
+  #define MESH_INSET 5          // Set Mesh bounds as an inset region of the bed
+  #define GRID_MAX_POINTS_X 6    // Don't use more than 7 points per axis, implementation limited.
   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
 
   //#define MESH_G28_REST_ORIGIN // After homing all axes ('G28' or 'G28 XYZ') rest Z at Z_MIN_POS
@@ -1267,7 +1267,7 @@
 
 #define PREHEAT_3_TEMP_HOTEND 235
 #define PREHEAT_3_TEMP_BED    80
-#define PREHEAT_3_FAN_SPEED     0 // Value from 0 to 255
+#define PREHEAT_3_FAN_SPEED    0 // Value from 0 to 255
 
 /**
  * Nozzle Park
