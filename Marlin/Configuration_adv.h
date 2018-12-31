@@ -996,7 +996,7 @@
                                                   //   For Bowden, the full length of the tube and nozzle.
                                                   //   For direct drive, the full length of the nozzle.
   //#define ADVANCED_PAUSE_CONTINUOUS_PURGE       // Purge continuously up to the purge length until interrupted.
-  #define ADVANCED_PAUSE_PURGE_FEEDRATE        10  // (mm/s) Extrude feedrate (after loading). Should be slower than load feedrate.
+  #define ADVANCED_PAUSE_PURGE_FEEDRATE        3  // (mm/s) Extrude feedrate (after loading). Should be slower than load feedrate.
   #define ADVANCED_PAUSE_PURGE_LENGTH         50  // (mm) Length to extrude after loading.
                                                   //   Set to 0 for manual extrusion.
                                                   //   Filament can be extruded repeatedly from the Filament Change menu
@@ -1014,7 +1014,7 @@
   //#define PARK_HEAD_ON_PAUSE                    // Park the nozzle during pause and filament change.
   //#define HOME_BEFORE_FILAMENT_CHANGE           // Ensure homing has been completed prior to parking for filament change
 
-  //#define FILAMENT_LOAD_UNLOAD_GCODES           // Add M701/M702 Load/Unload G-codes, plus Load/Unload in the LCD Prepare menu.
+  #define FILAMENT_LOAD_UNLOAD_GCODES           // Add M701/M702 Load/Unload G-codes, plus Load/Unload in the LCD Prepare menu.
   //#define FILAMENT_UNLOAD_ALL_EXTRUDERS         // Allow M702 to unload all extruders above a minimum target temp (as set by M302)
 #endif
 
@@ -1513,7 +1513,7 @@
  
  
  #define CUSTOM_USER_MENUS
-#if ENABLED(CUSTOM_USER_MENUS)
+  #if ENABLED(CUSTOM_USER_MENUS)
   #define USER_SCRIPT_DONE "M117 User Script Done"
   #define USER_SCRIPT_AUDIBLE_FEEDBACK
   #define USER_SCRIPT_RETURN  // Return to status screen after a script
@@ -1521,8 +1521,8 @@
   #define USER_DESC_1 "Home & Raise Z"
   #define USER_GCODE_1 "G28 \nG1 Z20 F2000"
 
-  #define USER_DESC_2 "Level X Carriage"
-  #define USER_GCODE_2 "G28 \nG90 \nG1 Z170 F3000 \nG1 Z180 F100 \nG4 S1 \nG1 Z170 F100 \nG28 Z \nG1 Z20 F2000"
+  //#define USER_DESC_2 "Level X Carriage"
+  //#define USER_GCODE_2 "G28 \nG90 \nG1 Z170 F3000 \nG1 Z180 F100 \nG4 S1 \nG1 Z170 F100 \nG28 Z \nG1 Z20 F2000"
 
   //#define USER_DESC_3 "Load ABS Filament"
   //#define USER_GCODE_3 "M140 S" STRINGIFY(PREHEAT_2_TEMP_HOTEND) \nG28\nG1 Z20\nG1 E40 F100"
