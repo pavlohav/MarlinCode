@@ -605,9 +605,9 @@
 /**
  * Default Axis Steps Per Unit (steps/mm)
  * Override with M92
- *                                        
+ * New Steps value = (Desired movement / Actual movement) * Current Steps value
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400.9, 164.91 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80.44, 79.84, 400.9, 164.91 }
 
 /**
  * Default Max Feed Rate (mm/s)
@@ -615,7 +615,7 @@
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  * http://www.kylesconverter.com/speed-or-velocity/meters-per-second-to-meters-per-minute
  */
-#define DEFAULT_MAX_FEEDRATE          { 200, 200, 15, 50 }
+#define DEFAULT_MAX_FEEDRATE          { 500, 500, 15, 50 }
 
 /**
  * Default Max Acceleration (change/s) change = mm/s
@@ -623,7 +623,7 @@
  * Override with M201
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
-#define DEFAULT_MAX_ACCELERATION      { 2000, 2000, 100, 10000 }
+#define DEFAULT_MAX_ACCELERATION      { 9000, 9000, 100, 10000 }
 
 /**
  * Default Acceleration (change/s) change = mm/s

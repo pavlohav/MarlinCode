@@ -3,10 +3,18 @@
         {
             "name": "Win32",
             "includePath": [
-                "C:\\Users\\Pavlo\\AppData\\Local\\Arduino15\\packages\\Sanguino\\hardware\\avr\\1.0.2\\**"
+                "C:\\Users\\Pavlo\\AppData\\Local\\Arduino15\\packages\\Sanguino\\hardware\\avr\\1.0.2\\**",
+                "/Users/pavlo/Library/Arduino15/packages/Sanguino/hardware/avr/1.0.3/**"
             ],
             "forcedInclude": [],
             "intelliSenseMode": "msvc-x64"
+        },
+        {
+            "name": "Mac",
+            "includePath": [
+                "/Users/pavlo/Library/Arduino15/packages/Sanguino/hardware/avr/1.0.3/**"
+            ],
+            "forcedInclude": []
         }
     ],
     "version": 4
