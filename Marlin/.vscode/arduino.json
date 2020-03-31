@@ -1,5 +1,7 @@
 {
     "programmer": "Arduino as ISP",
     "board": "Sanguino:avr:sanguino",
-    "configuration": "cpu=atmega1284p"
+    "configuration": "cpu=atmega1284p",
+    "sketch": "Marlin.ino",
+    "output": ".build"
 }
