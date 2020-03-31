@@ -4,6 +4,7 @@
 .vscode/launch.json
 .vscode/ipch
 Marlin/.build
+.build
 .piolibdeps
 .DS_Store
 project.checksum
