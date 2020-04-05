@@ -1521,8 +1521,8 @@
   #define USER_DESC_1 "Home & Raise Z"
   #define USER_GCODE_1 "G28 \nG1 Z20 F2000"
 
-  //#define USER_DESC_2 "Level X Carriage"
-  //#define USER_GCODE_2 "G28 \nG90 \nG1 Z170 F3000 \nG1 Z180 F100 \nG4 S1 \nG1 Z170 F100 \nG28 Z \nG1 Z20 F2000"
+  #define USER_DESC_2 "Reset BLTouch"
+  #define USER_GCODE_2 ""
 
   //#define USER_DESC_3 "Load ABS Filament"
   //#define USER_GCODE_3 "M140 S" STRINGIFY(PREHEAT_2_TEMP_HOTEND) \nG28\nG1 Z20\nG1 E40 F100"
