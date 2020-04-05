@@ -3,5 +3,6 @@
     "board": "Sanguino:avr:sanguino",
     "configuration": "cpu=atmega1284p",
     "sketch": "Marlin/Marlin.ino",
-    "output": ".build"
+    "output": ".build",
+    "port": "/dev/tty.usbserial-AH05F2R3"
 }
